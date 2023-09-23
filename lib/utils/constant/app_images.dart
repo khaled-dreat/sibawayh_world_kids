@@ -8,6 +8,11 @@ class AppImages {
   static const String unitedStates = 'assets/images/united_states.png';
   static const String iconInstall = 'assets/images/icon_install.png';
   static const String notFoundImage = 'assets/images/image_not_found.png';
+  static const String aWord = 'assets/img/ar_words/a.png';
+  static const String bWord = 'assets/img/ar_words/b.png';
+  static const String arBack = 'assets/backgraound/ar_back.png';
+  static const String arWrite = 'assets/img/ar_word_section/ar_write.jpg';
+  static const String arRead = 'assets/img/ar_word_section/ar_read.jpg';
   static const String arNumbers = 'assets/img/ar_section/ar_numbers.jpg';
   static const String arLetters = 'assets/img/ar_section/Ar_letters.jpg';
   static const String arSentences = 'assets/img/ar_section/Ar_sentences.jpeg';

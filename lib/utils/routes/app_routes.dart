@@ -5,10 +5,12 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     HomePage.nameRoute: (context) => const HomePage(),
     ErSection.nameRoute: (context) => const ErSection(),
+    ArWordSection.nameRoute: (context) => const ArWordSection(),
+    ArwordsWrite.nameRoute: (context) => const ArwordsWrite(),
   };
 
   // * inti Route
-  static String? get initRoute => ErSection.nameRoute;
+  static String? get initRoute => ArwordsWrite.nameRoute;
 
   // * push Name
   static void go(BuildContext context, String nameRoute) =>

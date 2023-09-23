@@ -7,7 +7,7 @@ class ErSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarHome(),
+      appBar: const AppBarHome(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(left: 45.r),

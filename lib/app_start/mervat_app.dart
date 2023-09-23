@@ -9,12 +9,15 @@ class MervatApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
       builder: (context, child) => MaterialApp(
+        // * Language
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+        theme: AppThemeChoose.light(context),
+        darkTheme: AppThemeChoose.dark(context),
+        themeMode: ThemeMode.light,
         routes: AppRoutes.routes,
         initialRoute: AppRoutes.initRoute,
       ),
