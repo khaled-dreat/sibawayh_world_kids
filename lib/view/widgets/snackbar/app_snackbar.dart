@@ -33,4 +33,19 @@ class AppSnackBar {
       displayDuration: const Duration(seconds: 1),
     );
   }
+
+  // * ❓
+  static void noData(BuildContext context, {required String msg}) {
+    showTopSnackBar(
+      Overlay.of(context),
+      CustomSnackBar.info(
+        message: msg,
+        icon: Icon(Icons.sentiment_very_dissatisfied_sharp,
+            color: const Color(0x15000000), size: 100.r),
+        textStyle: TextStyle(
+            fontWeight: FontWeight.w600, fontSize: 22.sp, color: Colors.white),
+      ),
+      displayDuration: const Duration(seconds: 1),
+    );
+  }
 }

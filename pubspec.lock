@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  avatar_glow:
+    dependency: "direct main"
+    description:
+      name: avatar_glow
+      sha256: "3627f6f97d1f10d3c1996ae108d3488eabaf68c0cf0c3eac7e7c746a3812881d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -341,6 +349,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  loading_indicator:
+    dependency: "direct main"
+    description:
+      name: loading_indicator
+      sha256: a101ffb2aa3e646137d7810bfa90b50525dd3f72c01235b6df7491cf6af6f284
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   matcher:
     dependency: transitive
     description:
@@ -698,6 +714,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  tweener:
+    dependency: "direct main"
+    description:
+      name: tweener
+      sha256: e2dc38ebca850242ff484856dd4eec86ce9dfdf377f634c3c8051fb2121c6c47
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.3"
   typed_data:
     dependency: transitive
     description:

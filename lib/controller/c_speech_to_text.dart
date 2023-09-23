@@ -2,12 +2,35 @@ part of '../utils/import/app_import.dart';
 
 class ControllerSpeechToText extends ChangeNotifier {
   bool isTranscribing = false;
+  bool isTranscribingForBtn = true;
+
+  // * Use To Save The Text Return From  Google Clude
   String content = "";
 
-  void transcribe(List<int> audio) async {
-    try {
-      isTranscribing = true;
+  // * Change Content Value
+  void changeContent(String value) {
+    content = value;
+    notifyListeners();
+  }
 
+  // * Change Is Transcribing Status
+  void changeIsTranscribing(bool value) {
+    isTranscribing = value;
+    notifyListeners();
+  }
+
+  void changeisTranscribingForBtn(bool value) {
+    isTranscribingForBtn = value;
+    notifyListeners();
+  }
+
+  // * Speech to Text Google Clude Service
+  void transcribe(List<int> audio, BuildContext context) async {
+    try {
+      dev.log("Speech to Text start");
+
+      changeIsTranscribing(true);
+      changeisTranscribingForBtn(false);
       final serviceAccount =
           ServiceAccount.fromString(r'''{ "type": "service_account",
   "project_id": "angelic-gift-398808",
@@ -29,20 +52,147 @@ class ControllerSpeechToText extends ChangeNotifier {
           sampleRateHertz: 44100,
           languageCode: 'ar');
 
-      print("audio");
       await speechToText.recognize(config, audio).then((value) {
-        print("info ${value.results.toString()}");
-        content = value.results
+        dev.log("info ${value.results.toString()}");
+
+        changeContent(value.results
             .map((e) => e.alternatives.first.transcript)
-            .join('\n');
-        print("$content");
+            .join('\n'));
+        dev.log(content);
       }).whenComplete(() {
-        isTranscribing = false;
+        changeIsTranscribing(false);
+        changeisTranscribingForBtn(true);
       });
-      notifyListeners();
-      print("speechToText");
+      dev.log("Speech to Text start");
+      checkPronStatus(context);
     } catch (e) {
-      print("Error Speeth to text : $e");
+      dev.log("Error Speeth to text : $e");
+    }
+  }
+
+  // * Used to check pronunciation status
+  void checkPronStatus(BuildContext context) {
+    if (content != "") {
+      if (content == "الف.") {
+        AppSnackBar.snackBarSuccess(context, msg: "أحسنت أجابة صحيحية");
+      } else {
+        AppSnackBar.snackBarError(context,
+            msg: "ركز أكثر وأعد الاستماع الى الحرف");
+      }
+    } else {
+      AppSnackBar.noData(context, msg: "أعد المحاولة هناك خطاء");
     }
   }
 }
+/*
+
+class Page1 extends StatefulWidget {
+  static const String nameRoute = "Page1";
+  const Page1({super.key});
+
+  @override
+  State<Page1> createState() => _Page1State();
+}
+
+class _Page1State extends State<Page1> {
+  List<Widget> get shapes => [
+        Container(width: 100.w, height: 80.h, color: Colors.blue.shade700),
+        Container(
+            width: 100.w,
+            height: 80.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              color: Colors.blue.shade300,
+            )),
+        Container(
+            width: 100.w,
+            height: 80.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100.r),
+              color: Colors.red.shade300,
+            )),
+      ];
+  final List<Widget> shapesSelected = [
+    Container(
+      width: 180.w,
+      height: 150.h,
+      color: Colors.blue.shade700,
+    ),
+    Container(
+        width: 180.w,
+        height: 150.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: Colors.blue.shade300,
+        )),
+    Container(
+        width: 180.w,
+        height: 150.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.r),
+          color: Colors.red.shade300,
+        )),
+  ];
+  int selectedShapeIndex = 0;
+  void changeShape(int newIndex) {
+    setState(() {
+      selectedShapeIndex = newIndex;
+      selectedShapeProparte(newIndex);
+    });
+  }
+
+  int rounded = 0;
+  Color colore = Colors.blue.shade700;
+  void selectedShapeProparte(int newIndex) {
+    switch (newIndex) {
+      case 0:
+        rounded = 0;
+        colore = Colors.blue.shade700;
+      case 1:
+        rounded = 20;
+        colore = Colors.blue.shade300;
+      default:
+        rounded = 100;
+        colore = Colors.red.shade300;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    InfoController pInfo = Provider.of<InfoController>(context);
+
+    return Scaffold(
+      appBar: const CustomAppBar(title: 'Animation'),
+      body: Column(children: [
+        // * Shapes
+        Expanded(
+          flex: 5,
+          child: Column(children: [
+            // todo : add provider for this text
+            Text(pInfo.name),
+            AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                width: 180.w,
+                height: 150.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(rounded.r),
+                  color: colore,
+                ))
+          ]),
+        ),
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: shapes.asMap().entries.map(
+              (e) {
+                final index = e.key;
+                final shape = e.value;
+                return InkWell(onTap: () => changeShape(index), child: shape);
+              },
+            ).toList(),
+          ),
+        )
+      ]),
+    );
+  }
+}*/

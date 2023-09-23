@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_speech/google_speech.dart';
 import 'package:google_speech/speech_client_authenticator.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:mervat_app/utils/constant/app_audio.dart';
 import 'package:mervat_app/utils/constant/app_images.dart';
 import 'package:just_audio/just_audio.dart';
@@ -16,13 +18,15 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:record/record.dart';
 
+import 'package:simple_ripple_animation/simple_ripple_animation.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
 // ? **************** Show & AS ***********************
 import 'dart:developer' as dev;
 import 'dart:io' as io;
 
-import 'package:simple_ripple_animation/simple_ripple_animation.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:tweener/tweener.dart';
 
 //   **************** Mervat App ***********************
 part '../../app_start/mervat_app.dart';

@@ -28,6 +28,9 @@ dependencies:
   google_speech: ^3.0.0
   simple_ripple_animation: ^0.0.7
   top_snackbar_flutter: ^3.1.0
+  loading_indicator: ^3.1.1
+  avatar_glow: ^2.0.2
+  tweener: ^2.2.3
 
 dev_dependencies:
   flutter_test:

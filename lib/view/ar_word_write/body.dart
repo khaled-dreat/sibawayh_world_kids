@@ -41,8 +41,7 @@ class ArwordsWrite extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 30.r),
-                  child: const RecordBtn(
-                      icon: Icons.record_voice_over, isRight: false),
+                  child: RecordBtn(),
                 ),
               ],
             ),
@@ -92,75 +91,6 @@ class NextPrevBtn extends StatelessWidget {
         color: Colors.white,
       ),
     );
-  }
-}
-
-class RecordBtn extends StatefulWidget {
-  final IconData icon;
-  final bool isRight;
-
-  const RecordBtn({
-    super.key,
-    required this.icon,
-    required this.isRight,
-  });
-
-  @override
-  State<RecordBtn> createState() => _RecordBtnState();
-}
-
-class _RecordBtnState extends State<RecordBtn> {
-  /* @override
-  void initState() {
-    super.initState();
-    Future.delayed(
-      Duration.zero,
-      () {
-        ControolerRecorder pRecord =
-            Provider.of<ControolerRecorder>(context, listen: false);
-      },
-    );
-  }*/
-
-  @override
-  Widget build(BuildContext context) {
-    ControolerRecorder pRecord = Provider.of<ControolerRecorder>(context);
-    ControllerSpeechToText pSpeechToText =
-        Provider.of<ControllerSpeechToText>(context);
-    ControolerRecorder pRecordWithoutListen =
-        Provider.of<ControolerRecorder>(context, listen: false);
-
-    return InkWell(
-        onTap: () async {
-          AppSnackBar.snackBarSuccess(context, msg: "أجابتك صحيحة");
-          if (pRecord._isRecording) {
-            await pRecordWithoutListen.stopRecord();
-            final audio = pRecord.getAudioContent();
-            pSpeechToText.transcribe(audio);
-          } else {
-            await pRecordWithoutListen.startRecord();
-          }
-        },
-        child: Container(
-            alignment: Alignment.center,
-            height: 50.h,
-            width: 250.w,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: const Color.fromARGB(92, 158, 158, 158),
-                    spreadRadius: 19.r),
-                BoxShadow(
-                    color: AppColors.colorFromHex("65ab9b"),
-                    spreadRadius: 10.r),
-              ],
-              color: AppColors.colorFromHex("edc48f"),
-              borderRadius: BorderRadius.all(Radius.circular(20.r)),
-            ),
-            child: Text(
-              "اختبر نفسك",
-              style: TextStyle(fontSize: 35.sp, color: Colors.white),
-            )));
   }
 }
 
@@ -232,6 +162,121 @@ class WordCard extends StatelessWidget {
                   color: Colors.white, size: 45.r)),
         )
       ]),
+    );
+  }
+}
+
+class RecordBtn extends StatefulWidget {
+  @override
+  _RecordBtnState createState() => _RecordBtnState();
+}
+
+class _RecordBtnState extends State<RecordBtn> {
+  double _counter = 0;
+
+  bool tap = true;
+  bool show = true;
+
+  @override
+  Widget build(BuildContext context) {
+    ControolerRecorder pRecord = Provider.of<ControolerRecorder>(context);
+    ControllerSpeechToText pSpeechToText =
+        Provider.of<ControllerSpeechToText>(context);
+    ControolerRecorder pRecordWithoutListen =
+        Provider.of<ControolerRecorder>(context, listen: false);
+
+    return Center(
+      child: InkWell(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        onHighlightChanged: (value) {
+          tap = !value;
+          show = false;
+          if (tap == true) {
+            if (pSpeechToText.isTranscribingForBtn) {
+              Tweener({'x': 30})
+                  .to({'x': 50}, 500)
+                  .easing(Ease.linear.easeIn)
+                  .onUpdate((obj) {
+                    setState(() {
+                      _counter = (obj['x']).round() * 1.0;
+                    });
+                  })
+                  .onComplete((obj) {})
+                  .start();
+            } else {
+              Tweener(
+                {'x': 50},
+              )
+                  .to({'x': 30}, 200)
+                  .easing(Ease.linear.easeIn)
+                  .onUpdate((obj) {
+                    setState(() {
+                      _counter = (obj['x']).round() * 1.0;
+                    });
+                  })
+                  .onComplete((obj) {})
+                  .start();
+            }
+          }
+        },
+        onTapUp: (details) async {
+          show = false;
+
+          if (pSpeechToText.isTranscribingForBtn) {
+            await pRecordWithoutListen.stopRecord();
+            final audio = pRecord.getAudioContent();
+            pSpeechToText.transcribe(audio, context);
+          }
+        },
+        onTapDown: (details) async {
+          if (pSpeechToText.isTranscribingForBtn) {
+            await pRecordWithoutListen.startRecord();
+          }
+        },
+        child: AnimatedContainer(
+          curve: Curves.fastLinearToSlowEaseIn,
+          duration: const Duration(seconds: 2),
+          height: tap ? 50.h : 100.h,
+          width: tap ? 250.w : 120.w,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                  color: const Color.fromARGB(92, 158, 158, 158),
+                  spreadRadius: 19.r),
+              BoxShadow(
+                  color: AppColors.colorFromHex("65ab9b"), spreadRadius: 10.r),
+              BoxShadow(
+                  color: Color(0xFFFF5757).withOpacity(0.5),
+                  offset: Offset(0, 5),
+                  blurRadius: 30)
+            ],
+            color: AppColors.colorFromHex("edc48f"),
+            borderRadius: tap
+                ? BorderRadius.all(Radius.circular(20.r))
+                : BorderRadius.circular(100.r),
+          ),
+          child: pSpeechToText.isTranscribing
+              ? LoadingIndicator(
+                  indicatorType: Indicator.pacman,
+                  colors: [Colors.red, Colors.green, Colors.blue],
+                )
+              : tap
+                  ? Text(
+                      "اختبر نفسك",
+                      style: TextStyle(fontSize: 35.sp, color: Colors.white),
+                    )
+                  : SizedBox(
+                      height: 60.h,
+                      child: LoadingIndicator(
+                        indicatorType: Indicator.lineScale,
+                        colors: [Colors.red, Colors.green, Colors.blue],
+                        strokeWidth: 2,
+                      ),
+                    ),
+        ),
+      ),
     );
   }
 }

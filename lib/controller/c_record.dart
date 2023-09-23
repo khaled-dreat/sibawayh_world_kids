@@ -6,6 +6,7 @@ class ControolerRecorder extends ChangeNotifier {
   // * File Path
   String _afterRecordFilePathe = "";
   bool _isRecording = false;
+  bool isTranscribingForBtn = true;
 
   // * cleare Path of Old File After Record
   clearOldData() {
@@ -13,31 +14,40 @@ class ControolerRecorder extends ChangeNotifier {
     ChangeNotifier();
   }
 
-  startRecord() async {
-    final _isPermitted = (await AppPermissionManagement.recordingPermission() &&
-        await AppPermissionManagement.storagePermission());
-    if (!_isPermitted) return;
-    if (!(await _record.hasPermission())) return;
-    final _voiceDirPath = await AppStorageManagement.getAudioDir;
-    final _voiceFilePath = AppStorageManagement.createRecordAudioPath(
-        dirPath: _voiceDirPath, fileName: "audio_message");
+  void changeisTranscribingForBtn(bool value) {
+    isTranscribingForBtn = value;
+    notifyListeners();
+  }
 
-    await _record.start(path: _voiceFilePath, encoder: AudioEncoder.wav);
+  startRecord() async {
+    final isPermitted = (await AppPermissionManagement.recordingPermission() &&
+        await AppPermissionManagement.storagePermission());
+    if (!isPermitted) return;
+    if (!(await _record.hasPermission())) return;
+    final voiceDirPath = await AppStorageManagement.getAudioDir;
+    final voiceFilePath = AppStorageManagement.createRecordAudioPath(
+        dirPath: voiceDirPath, fileName: "audio_message");
+
+    await _record.start(path: voiceFilePath, encoder: AudioEncoder.wav);
+    dev.log("Record start");
+
     _isRecording = true;
+    changeisTranscribingForBtn(false);
     notifyListeners();
 
-    AppToast.toast('Recording Started');
+    //AppToast.toast('Recording Started');
   }
 
   stopRecord() async {
-    String? _audioFilePath;
+    String? audioFilePath;
     if (await _record.isRecording()) {
-      _audioFilePath = await _record.stop();
-      AppToast.toast('Recording Stopped');
+      audioFilePath = await _record.stop();
+      //  AppToast.toast('Recording Stopped');
     }
-    dev.log("Audio file path: $_audioFilePath");
+    dev.log("Audio file path: $audioFilePath");
     _isRecording = false;
-    _afterRecordFilePathe = _audioFilePath ?? "";
+    changeisTranscribingForBtn(true);
+    _afterRecordFilePathe = audioFilePath ?? "";
     dev.log("000000 $_afterRecordFilePathe");
     notifyListeners();
   }
