@@ -30,7 +30,7 @@ class ArwordsWrite extends StatelessWidget {
                             isRight: false),
                       ]),
                 ),
-                WordCard(),
+                const WordCard(),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

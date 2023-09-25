@@ -16,7 +16,6 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flutter_screenutil: ^5.9.0
-  audioplayers: ^5.1.0
   just_audio: ^0.9.35
   google_fonts: ^6.1.0
   easy_localization: ^3.0.3
@@ -61,6 +60,7 @@ flutter:
       - assets/img/ar_word_section/
       - assets/img/ar_words/
       - assets/audio/ar_words/
+      - assets/audio/app_sounds/
       - assets/backgraound/
       - assets/lang/
       - assets/jeson_google_clude/angelic-gift-398808-44e3eddc0b16.json
